@@ -1,0 +1,24 @@
+// bower:scss
+// endbower
+.square {
+  border : 2px solid red;
+  position : absolute;
+}
+
+.left-panel, .right-panel {
+  float:left;
+  height : 100%;
+  position: relative;
+  padding : 10px;
+}
+
+.left-panel {
+  background-color : #EEEEEE;
+  width : 200px;
+}
+
+body {
+  width: 800px;
+  margin: auto;
+  height : 500px;
+}

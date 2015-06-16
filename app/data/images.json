@@ -1,0 +1,17 @@
+{
+	"1" : {
+		"src" : "photo1.jpg",
+		"thumbnail" : "photo1_thumb.jpg",
+		"tagIds" : [1,3]
+	},
+	"2" : {
+		"src" : "photo2.jpg",
+		"thumbnail" : "photo2_thumb.jpg",
+		"tagIds" : [1]
+	},
+	"3" : {
+		"src" : "photo3.jpg",
+		"thumbnail" : "photo3_thumb.jpg",
+		"tagIds" : [2]
+	}
+}

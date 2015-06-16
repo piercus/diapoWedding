@@ -1,0 +1,10 @@
+<h2>{{tag.name}}</h2>
+<h3>Images</h3>
+<ul class="thumbnails">
+	<li ng-repeat="image in tag.getImages()">
+		<a ng-href="/#/image/{{image.id}}">
+			{{image.src}}
+			<img ng-src="{{image.getThumbnail()}}" />
+		</a>
+	</li>
+</ul>
