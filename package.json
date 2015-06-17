@@ -42,5 +42,8 @@
   },
   "scripts": {
     "test": "grunt test"
+  },
+  "dependencies": {
+    "sqlite3": "^3.0.8"
   }
 }
