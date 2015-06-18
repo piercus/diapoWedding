@@ -19,6 +19,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^2.1.2",
     "grunt-google-cdn": "^0.4.3",
+    "grunt-image-resize": "^1.0.0",
     "grunt-karma": "^0.11.0",
     "grunt-newer": "^1.1.0",
     "grunt-ng-annotate": "^0.9.2",
@@ -44,6 +45,7 @@
     "test": "grunt test"
   },
   "dependencies": {
+    "express": "^4.12.4",
     "sqlite3": "^3.0.8"
   }
 }

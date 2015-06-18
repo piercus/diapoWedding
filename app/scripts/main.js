@@ -22,7 +22,7 @@ require.config({
 
 
 
-require(['diapoWedding', 'domReady', 'customBootstrap', 'angular', 'controllers/controllers', 'directives/directives'],function(a, domReady, b, ng){
+require(['angular', 'angular-route', 'controllers/controllers', 'directives/directives'],function(ng){
 	'use strict';
 	//console.log("here");
 

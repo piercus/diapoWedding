@@ -27,6 +27,16 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    image_resize: {
+      resize: {
+        options: {
+          width: 100,
+        },
+        src: 'src/*.JPG',
+        dest: 'dest/'
+      }
+    }
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -69,12 +79,33 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        debug : true,
+        livereload: 35729/*,
+        middleware: function(connect, options, middlewares) {
+
+          // inject a custom middleware into the array of default middlewares
+          middlewares.unshift(function(req, res, next) {
+            console.log(req.url);
+            if (req.url !== '/hello/world') return next();
+
+            res.end('Hello, world from port #' + options.port + '!');
+          });
+
+          return middlewares;
+
+        }*//*,
+        onCreateServer: function(server, connect, options) {
+          console.log("connect", connect.static.mime.define);
+          connect.mime.define({'image/jpeg': ['JPG']});
+        }*/
       },
       livereload: {
         options: {
           open: true,
           middleware: function (connect) {
+            
+            //connect.static.mime.define({"image/jpeg" : ['JPG']});
+
             return [
               connect.static('.tmp'),
               connect.static('test'),
@@ -82,11 +113,24 @@ module.exports = function (grunt) {
                 '/bower_components',
                 connect.static('./bower_components')
               ),
+              connect().use('app/images',connect.static('./app/images')),
               connect().use(
                 '/app/styles',
                 connect.static('./app/styles')
               ),
-              connect.static(appConfig.app)
+              connect.static(appConfig.app)/*connect().use(function(req, res, next) {
+                console.log(req.url);
+                if(req.url.slice(-3) === "JPG"){
+                  var img = require("fs").readFileSync('./app/images/test2.jpg');
+                  console.log(img);
+                  res.writeHead(200, {'Content-Type': 'image/jpeg' });
+                  res.end(img, 'binary');
+                  return;
+                  //res.setHeader("Content-Type", "image/jpeg ")
+                }
+
+                return next();
+              }).use(connect.static(appConfig.app))*/
             ];
           }
         }
@@ -563,8 +607,8 @@ module.exports = function (grunt) {
         });
 
         writeStreamImgs.write("{\n");
-        db.each("SELECT i.id, a.relativePath||'/'||i.name AS src , GROUP_CONCAT(it.tagid) AS tagIds FROM Images i,Albums a, ImageTags it WHERE a.id = i.album AND it.imageid = i.id GROUP BY i.id", function(err, row) {
-            listImg.push('  "'+row.id + '": { "src": "'+row.src+'", "tagIds": ['+row.tagIds+']}');
+        db.each("SELECT i.id, a.relativePath||'/'||i.name AS src , GROUP_CONCAT(it.tagid) AS tagIds, info.width, info.height FROM ImageInformation info, Images i,Albums a, ImageTags it WHERE a.id = i.album AND it.imageid = i.id AND info.imageid = i.id GROUP BY i.id", function(err, row) {
+            listImg.push('  "'+row.id + '": { "src": "'+row.src+'", "width": "'+row.width+'", "height": "'+row.height+'", "tagIds": ['+row.tagIds+']}');
         }, function(){
           writeStreamImgs.write(listImg.join(",\n")+'\n}');
           writeStreamImgs.close();  
@@ -583,7 +627,7 @@ module.exports = function (grunt) {
                 height = row.value.match(/height=\"([^\"]*)\"/)[1],
                 width = row.value.match(/width=\"([^\"]*)\"/)[1];
 
-            listImgTags.push('  "'+row.imageid+","+row.tagid + '": { "rect": { "x": '+x+', "y": '+y+', "width": '+width+', "height": '+height+'}}');
+            listImgTags.push('  "'+row.imageid+","+row.tagid + '": { "rect": { "top": '+y+', "left": '+x+', "width": '+width+', "height": '+height+'}}');
         }, function(){
           writeStreamImgTags.write(listImgTags.join(",\n")+'\n}');
           writeStreamImgTags.close();  

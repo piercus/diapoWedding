@@ -13,7 +13,7 @@ Run `grunt` for building and `grunt serve` for preview.
 
 Run
 
-    grunt exportDigikam:<digikam sqlite db file>
+    grunt exportDigikam:<absolute path to digikam sqlite db file>
 
 ## Testing
 

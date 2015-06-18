@@ -1,10 +1,5 @@
 <h2>{{image.src}}</h2>
-<div class="tags">
-	<div ng-repeat="tagInfo in tagInfos" class="square" ng-style="{{tagInfo.imgTag.rect}}">
-		<a ng-href="/#/tag/{{tagInfo.tag.id}}">{{tagInfo.tag.name}}</a>
-	</div>
-</div>
-<img class="main-img" ng-src="{{image.getSrc()}}"></img>
+<tagged-image img="image" list="tagInfos" width="500"></tagged-image>
 <h3>Personnes sur la photo</h3>
 <ul class="tags">
 	<li ng-repeat="tagInfo in tagInfos">

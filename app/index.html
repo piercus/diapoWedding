@@ -20,8 +20,8 @@
     <![endif]-->
     <div class="left-panel">
     <h3>Tag List</h3>
-      <ul class="tags">
-        <li ng-repeat="tag in allTags">
+      <ul class="tags-menu">
+        <li ng-repeat="tag in allTags" class="tag-item">
           <a ng-href="/#/tag/{{tag.id}}">{{tag.name}}</a>
         </li>
       </ul>
