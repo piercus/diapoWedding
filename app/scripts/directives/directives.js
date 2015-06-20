@@ -9,16 +9,18 @@ define(['angular'], function(angular){
 				width : "@width"
 			},
 			templateUrl : 'views/directives/taggedImage.html',
-			link: function(scope, element, attrs) {
+			link : function(scope) {
 			    scope.getStyle = function(rect, imgWidth, width){
-			    	console.log(rect,imgWidth,width);
+			    	//console.log(rect,imgWidth,width);
 					var r = parseInt(width)/imgWidth;
 					var res = {};
-					for (var i in rect) if(rect.hasOwnProperty(i)){
-						res[i] = rect[i]*r + "px";
+					for (var i in rect) {
+						if(rect.hasOwnProperty(i)){
+							res[i] = rect[i]*r + "px";
+						}
 					}
-					return res
-				}
+					return res;
+				};
 			}
 		};
 	}]);
