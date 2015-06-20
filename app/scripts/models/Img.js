@@ -1,4 +1,4 @@
-define(['models/Base', 'helpers/array/compact'], function(B){
+define(['models/Base', 'helpers/Array/compact'], function(B){
 	'use strict';
 
 	var Img = B.model("Img", {

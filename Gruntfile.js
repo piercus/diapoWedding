@@ -12,14 +12,14 @@ module.exports = function (grunt) {
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
+  require('./tasks/create_thumbnails')(grunt);
+
+
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
   // Configurable paths for the application
-  var appConfig = {
-    app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
-  };
+  var appConfig = require('./appConfig.js');
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -27,15 +27,34 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
-    image_resize: {
+    create_thumbnails: {
       resize: {
         options: {
-          width: 100,
-        },
-        src: 'src/*.JPG',
-        dest: 'dest/'
+          height: '<%= yeoman.thumbHeight %>',
+          src: '<%= yeoman.imgPath %>',
+          dest: '<%= yeoman.thumbnailPath %>'
+        }
       }
-    }
+    },
+
+    sprite:{
+      all: {
+        dest: '<%= yeoman.spriteImg %>',
+        destCss: '<%= yeoman.spriteCss %>',
+        engine: 'gmsmith'
+      }
+    },
+
+    export_digikam : {
+      dbFile: '<%= yeoman.digikamDbFile %>' 
+    },
+
+    shell: {
+      hooks: {
+        // Copy the project's pre-commit hook into .git/hooks
+        command: 'mkdir -p git-hooks;cp git-hooks/pre-commit .git/hooks/'
+      }
+    },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
@@ -192,6 +211,7 @@ module.exports = function (grunt) {
           ]
         }]
       },
+      hooks: ['.git/hooks/pre-commit'],
       server: '.tmp'
     },
 
@@ -488,13 +508,11 @@ module.exports = function (grunt) {
           }
         }
       }
-    },
-
-    exportDigikam : {
-      folder: "<%= yeoman.app %>/data" 
     }
   });
-
+  
+  // Clean the .git/hooks/pre-commit file then copy in the latest version
+  grunt.registerTask('hookmeup', ['clean:hooks', 'shell:hooks']);
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -554,91 +572,5 @@ module.exports = function (grunt) {
     'build'
   ]);
 
-  grunt.registerTask('exportDigikam', 'export the digikam photo data', function(dbFile){
-    if (arguments.length === 0) {
-      grunt.log.writeln(this.name + ", no args");
-    } else {
-      grunt.log.writeln(this.name + ", " + dbFile);
-      var done = this.async();
-      grunt.config.requires('exportDigikam.folder');
-      var folder= grunt.config('exportDigikam.folder');
-
-      var sqlite3 = require('sqlite3').verbose();
-      console.log(dbFile);
-      var db = new sqlite3.Database(dbFile);
-      var fs = require("fs");
-
-      var writeStreamTags = fs.createWriteStream(folder+"/tags.json",{ 
-        flags: 'w',
-        encoding: "utf8"
-      });
-
-      var writeStreamImgs = fs.createWriteStream(folder+"/images.json",{ 
-        flags: 'w',
-        encoding: "utf8"
-      });
-
-      var writeStreamImgTags = fs.createWriteStream(folder+"/imagesTags.json",{ 
-        flags: 'w',
-        encoding: "utf8"
-      });
-
-      console.log("here");
-      var listTag = [], listImg = [], listImgTags = [];
-
-      var nAsync = 3;
-
-      var closeStream = function(){
-        if(nAsync === 0){
-          db.close();
-          done();
-        }
-      };
-
-      db.serialize(function() {
-        writeStreamTags.write("{\n");
-        db.each("SELECT t.id, t.name, t.pid, GROUP_CONCAT(img.imageid) AS imageIds FROM Tags t JOIN ImageTags img ON t.id = img.tagid GROUP BY t.id;", function(err, row) {
-            listTag.push('  "'+row.id + '": { "name": "'+row.name+'", "pid": '+row.pid+', "imageIds": ['+row.imageIds+']}');
-        }, function(){
-          writeStreamTags.write(listTag.join(",\n")+'\n}');
-          writeStreamTags.close();  
-          nAsync--;
-          closeStream();
-        });
-
-        writeStreamImgs.write("{\n");
-        db.each("SELECT i.id, a.relativePath||'/'||i.name AS src , GROUP_CONCAT(it.tagid) AS tagIds, info.width, info.height FROM ImageInformation info, Images i,Albums a, ImageTags it WHERE a.id = i.album AND it.imageid = i.id AND info.imageid = i.id GROUP BY i.id", function(err, row) {
-            listImg.push('  "'+row.id + '": { "src": "'+row.src+'", "width": "'+row.width+'", "height": "'+row.height+'", "tagIds": ['+row.tagIds+']}');
-        }, function(){
-          writeStreamImgs.write(listImg.join(",\n")+'\n}');
-          writeStreamImgs.close();  
-          nAsync--;
-          closeStream();
-        });
-
-
-        writeStreamImgTags.write("{\n");
-        db.each(
-          //SELECT idSELECT tagid, imageid, property, count(*) FROM ImageTagProperties GROUP BY tagid, imageid, property
-          //SELECT * FROM (SELECT tagid, imageid, property, count(*) as cnt FROM ImageTagProperties GROUP BY tagid, imageid, property) as test where test.cnt > 1
-        'SELECT * FROM ImageTagProperties', function(err, row) {
-            var x = row.value.match(/x=\"([^\"]*)\"/)[1],
-                y = row.value.match(/y=\"([^\"]*)\"/)[1],
-                height = row.value.match(/height=\"([^\"]*)\"/)[1],
-                width = row.value.match(/width=\"([^\"]*)\"/)[1];
-
-            listImgTags.push('  "'+row.imageid+","+row.tagid + '": { "rect": { "top": '+y+', "left": '+x+', "width": '+width+', "height": '+height+'}}');
-        }, function(){
-          writeStreamImgTags.write(listImgTags.join(",\n")+'\n}');
-          writeStreamImgTags.close();  
-          nAsync--;
-          closeStream();
-        });
-
-      });
-
-
-
-    }
-  });
+  
 };

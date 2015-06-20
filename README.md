@@ -15,6 +15,10 @@ Run
 
     grunt exportDigikam:<absolute path to digikam sqlite db file>
 
+## Resizing images
+
+    grunt sprite
+
 ## Testing
 
 Running `grunt test` will run the unit tests.
