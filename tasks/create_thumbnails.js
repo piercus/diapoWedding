@@ -83,7 +83,7 @@ module.exports = function(grunt) {
 					}
 
 					grunt.config.set('sprite.all.src', thumbnails);
-					fs.writeFileAsync('../.tmp/thumbnails.json',"{'thumbnails : ['"+thumbnails.join("', '")+"']}");
+					fs.writeFileSync('thumbnails.json','{"thumbnails" : ["'+thumbnails.join('", "')+'"]}', {'encoding' : "utf8"});
 					grunt.task.run('sprite');
 					done();
 			});
