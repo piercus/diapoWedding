@@ -16,12 +16,6 @@ define(['angular', 'models/models'], function(angular){
 
 		//transform
 		scope.tagInfos = scope.image.getTagInfos().map(function(tI){
-			/*var imgTag2 = {rect : {}};
-			for (var prop in tI.imgTag.rect){
-				if(tI.imgTag.rect.hasOwnProperty(prop)){
-					imgTag2.rect[prop] = tI.imgTag.rect[prop]+"px";
-				}
-			}*/
 			return {
 				tag : tI.tag,
 				imgTag : tI.imgTag

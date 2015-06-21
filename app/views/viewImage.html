@@ -1,6 +1,8 @@
-<tagged-image img="image" list="tagInfos" width="500"></tagged-image>
+<tagged-image img="image" list="tagInfos" width="550"></tagged-image>
 <ul class="tags bottom-tags">
-	<li ng-repeat="tagInfo in tagInfos">
-		<a ng-href="/#/tag/{{tagInfo.tag.id}}">{{tagInfo.tag.name}}</a>
-	</li>
+	<a ng-repeat="tagInfo in tagInfos" ng-href="/#/tag/{{tagInfo.tag.id}}">
+		<li>
+			{{tagInfo.tag.name}}
+		</li>
+	</a>
 </ul>

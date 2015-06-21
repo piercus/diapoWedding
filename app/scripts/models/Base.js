@@ -39,6 +39,16 @@ define(["seed-js/Seed"], function(S){
 		return l;
 	};
 
+	B.where = function(g){
+		var l = [];
+		for (var i in this.indexes) {
+			if(this.indexes.hasOwnProperty(i) && g(this.indexes[i])){
+				l.push(this.indexes[i]);
+			}
+		}
+		return l;
+	};
+
 	B.model = function(name, proto){
 		var M = this.extend(proto);
 		delete M.models;

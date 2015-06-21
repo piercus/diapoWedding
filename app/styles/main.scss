@@ -1,5 +1,8 @@
+@import 'sprites';
+ 
 // bower:scss
 // endbower
+ 
 .square {
   &:hover {
     border : 2px solid red;
@@ -39,7 +42,7 @@ tagged-image {
   display: block;
 }
 
-$height: 70px;
+$height: 100px;
 
 ul.thumbnails {
   li {
@@ -48,7 +51,7 @@ ul.thumbnails {
     height: $height+4px;
     width: 1.5*$height;
     margin : 10px;
-    img {
+    div.img {
       height: $height;
       display : block;
       margin-left:auto;
@@ -57,40 +60,51 @@ ul.thumbnails {
 
     }
     &:hover {
-      img{
-        border : 2px solid grey;
+      div.img {
+        border : 2px solid gray;
       }
       background-color : #F3F3F3;
     }
   }
 }
 
-.tags-menu {
+.tags-menu, .bottom-tags {
   display: block;
   margin: 0px;
   padding: 9px;
-  .tag-item {
+  li {
     border-radius:4px;
     border : 2px solid #E4E4E4;
     padding : 8px 10px;
     display : block;
-    a {
-      text-decoration : none;
-      color : #3E3E3E;
-      margin-left:auto;
-      margin-right : auto;
-      display : block;
-      text-align: center;
-    }
     margin-top: 6px;
     margin-bottom: 6px;
+  }
+  a {
+    text-decoration : none;
+    color : #3E3E3E;
+    margin-left:auto;
+    margin-right : auto;
+    display : block;
+    text-align: center;
     &:hover {
-      background-color : #E4E4E4;
-      a {
-        text-decoration : none;
-        color : #3E3E3E;
-        
+      text-decoration : none;
+      color : #3E3E3E;
+      li {
+        background-color : #E4E4E4;
       }
     }
   }
+}
+
+.tags-menu {
+
+}
+.bottom-tags a {
+  float : left;
+  margin : 10px;
+}
+
+.main-img {
+  width:550px;
 }

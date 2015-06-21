@@ -2,7 +2,7 @@
 <ul class="thumbnails">
 	<li ng-repeat="image in tag.getImages()">
 		<a ng-href="/#/image/{{image.id}}">
-			<img ng-src="{{image.getThumbnail()}}" />
+			<div class="img {{image.spriteClass}}"></div>
 		</a>
 	</li>
 </ul>
