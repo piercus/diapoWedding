@@ -9,10 +9,6 @@ var rjs = require("requirejs");
 
 var fs = require("fs");
 
-rjs.config({
-	baseUrl : 'app/scripts/'
-});
-
 //load mapAsync funtion
 var objMapAsync = rjs('helpers/objMapAsync');
 

@@ -20,9 +20,9 @@
     <![endif]-->
     <div class="left-panel">
       <ul class="tags-menu">
-        <li ng-repeat="tag in allTags" class="tag-item">
-          <a ng-href="/#/tag/{{tag.id}}">{{tag.name}}</a>
-        </li>
+        <a ng-repeat="tag in allTags" ng-href="/#/tag/{{tag.id}}">
+           <li class="tag-item">{{tag.name}}</li>
+        </a>
       </ul>
     </div>
     <div class="right-panel">

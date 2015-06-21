@@ -7,6 +7,12 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var rjs = require("requirejs");
+
+rjs.config({
+  baseUrl : 'app/scripts/'
+});
+
 module.exports = function (grunt) {
 
   // Load grunt tasks automatically
@@ -20,6 +26,9 @@ module.exports = function (grunt) {
 
   // Configurable paths for the application
   var appConfig = require('./appConfig.js');
+
+  //augment Array Prototype with substract function
+  rjs("helpers/Array/substract");
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -39,6 +48,7 @@ module.exports = function (grunt) {
 
     sprite:{
       all: {
+        src: "",//require('./.tmp/thumbnails.json').thumbnails.substract(require('./.tmp/thumbnails.json').errors),
         dest: '<%= yeoman.spriteImg %>',
         destCss: '<%= yeoman.spriteCss %>',
         engine: 'gmsmith'

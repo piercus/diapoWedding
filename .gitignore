@@ -6,4 +6,6 @@
 app/data
 appConfig.js
 /.git
-app/styles/sprite.css
+app/styles/_sprite.scss
+app/images/spritesheet.jpg
+*.bckup
