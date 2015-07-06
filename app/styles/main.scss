@@ -1,5 +1,7 @@
 @import 'sprites';
- 
+
+@include sprites($spritesheet-sprites);
+
 // bower:scss
 // endbower
  
@@ -19,7 +21,7 @@
 
 .left-panel, .right-panel {
   float:left;
-  height : 100%;
+  height : 600px;
   position: relative;
   padding : 10px;
 }
@@ -45,12 +47,16 @@ tagged-image {
 $height: 100px;
 
 ul.thumbnails {
-  li {
+  position: relative;
+  display: block;
+  float: left;
+
+  li.thumbnail {
     float:left;
-    display:block;
     height: $height+4px;
     width: 1.5*$height;
-    margin : 10px;
+    margin : 11px;
+    display: block;
     div.img {
       height: $height;
       display : block;
@@ -67,7 +73,25 @@ ul.thumbnails {
     }
   }
 }
-
+ul.pagination {
+  position: relative;
+  display: block;
+  width: 240px;
+  margin: 0 auto;
+  li{
+    position: relative;
+    float: left;
+    display: block;
+    padding: 5px;
+    &.active {
+      font-weight: bold;
+      a{
+        text-decoration : none;
+        color: black;
+      }
+    }
+  }
+}
 .tags-menu, .bottom-tags {
   display: block;
   margin: 0px;
@@ -104,7 +128,14 @@ ul.thumbnails {
   float : left;
   margin : 10px;
 }
-
+ul.image {
+  float:left;
+}
+div.image{
+  display : block;
+  border : 2px solid red;
+  position: relative;
+}
 .main-img {
   width:550px;
 }

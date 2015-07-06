@@ -1,8 +1,9 @@
 <h2>{{tag.name}}</h2>
 <ul class="thumbnails">
-	<li ng-repeat="image in tag.getImages()">
-		<a ng-href="/#/image/{{image.id}}">
+	<li dir-paginate="image in tag.getImages() | itemsPerPage:9" class="thumbnail">
+		<a ng-href="/diapo/#/image/{{image.id}}/{{tag.id}}">
 			<div class="img {{image.spriteClass}}"></div>
 		</a>
 	</li>
 </ul>
+<dir-pagination-controls></dir-pagination-controls>

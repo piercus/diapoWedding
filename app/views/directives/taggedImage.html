@@ -1,6 +1,6 @@
 <div class="tags">
 	<div ng-repeat="tagInfo in tagInfos" class="square" ng-style="{{getStyle(tagInfo.imgTag.rect,img.width,width)}}">
-		<a ng-href="/#/tag/{{tagInfo.tag.id}}">{{tagInfo.tag.name}}</a>
+		<a ng-href="/diapo/#/tag/{{tagInfo.tag.id}}">{{tagInfo.tag.name}}</a>
 	</div>
 </div>
 <img class="main-img" ng-src="{{img.getSrc()}}" width="{{width}}"></img>

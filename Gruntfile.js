@@ -10,8 +10,14 @@
 var rjs = require("requirejs");
 
 rjs.config({
-  baseUrl : 'app/scripts/'
+  baseUrl : 'app/scripts/',
+  paths: {
+    'seed-js/Seed': 'vendor/Seed-min'
+  }
 });
+
+var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+
 
 module.exports = function (grunt) {
 
@@ -19,7 +25,8 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   require('./tasks/create_thumbnails')(grunt);
-
+  require('./tasks/sqlite_transfer')(grunt);
+  require('./tasks/export_digikam')(grunt);
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
@@ -37,26 +44,42 @@ module.exports = function (grunt) {
     yeoman: appConfig,
 
     create_thumbnails: {
-      resize: {
+      /*thumbnail: {
         options: {
           height: '<%= yeoman.thumbHeight %>',
           src: '<%= yeoman.imgPath %>',
           dest: '<%= yeoman.thumbnailPath %>'
         }
+      },*/
+      normalize: {
+        options: {
+          width: '<%= yeoman.public.imgWidth %>',
+          src: '<%= yeoman.imgPath %>',
+          dest: '<%= yeoman.normalizedPath %>'
+        }
       }
+    },
+
+    sqlite_transfer : {
+      options : {}
     },
 
     sprite:{
       all: {
-        src: "",//require('./.tmp/thumbnails.json').thumbnails.substract(require('./.tmp/thumbnails.json').errors),
+        src: require('./thumbnails.json').thumbnails,
         dest: '<%= yeoman.spriteImg %>',
         destCss: '<%= yeoman.spriteCss %>',
-        engine: 'gmsmith'
+        cssVarMap: function (sprite) {
+          sprite.name = rjs("models/Img").prototype.cssClass(sprite.name);
+        }
       }
     },
 
     export_digikam : {
-      dbFile: '<%= yeoman.digikamDbFile %>' 
+      options :{
+        dbFile: '<%= yeoman.digikamDbFile %>',
+        folder: './app/data'
+      }
     },
 
     shell: {
@@ -109,33 +132,47 @@ module.exports = function (grunt) {
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
         debug : true,
-        livereload: 35729/*,
-        middleware: function(connect, options, middlewares) {
+        livereload: 35729
+      },
+      rules: [
+          // Internal rewrite{ from: '^/myappcontext/secured/(.*)$', to: '/$1' }
+          {from: '^/diapo(.*)$', to: '$1'}
+      ],
+      development: {
+          options: {
+              middleware: function (connect, options) {
+                  var middlewares = [];
 
-          // inject a custom middleware into the array of default middlewares
-          middlewares.unshift(function(req, res, next) {
-            console.log(req.url);
-            if (req.url !== '/hello/world') return next();
+                  // RewriteRules support
+                  middlewares.push(rewriteRulesSnippet);
 
-            res.end('Hello, world from port #' + options.port + '!');
-          });
+                  if (!Array.isArray(options.base)) {
+                      options.base = [options.base];
+                  }
 
-          return middlewares;
+                  var directory = options.directory || options.base[options.base.length - 1];
+                  options.base.forEach(function (base) {
+                      // Serve static files.
+                      middlewares.push(connect.static(base));
+                  });
 
-        }*//*,
-        onCreateServer: function(server, connect, options) {
-          console.log("connect", connect.static.mime.define);
-          connect.mime.define({'image/jpeg': ['JPG']});
-        }*/
+                  // Make directory browse-able.
+                  middlewares.push(connect.directory(directory));
+
+                  return middlewares;
+              }
+          }
       },
       livereload: {
-        options: {
-          open: true,
-          middleware: function (connect) {
+        options: {  
+          open: {
+                 target: 'http://localhost:9000/diapo'
+          },
+          middleware: function (connect, options) {
             
             //connect.static.mime.define({"image/jpeg" : ['JPG']});
 
-            return [
+            return [rewriteRulesSnippet,
               connect.static('.tmp'),
               connect.static('test'),
               connect().use(
@@ -182,7 +219,15 @@ module.exports = function (grunt) {
       },
       dist: {
         options: {
-          open: true,
+          open: {
+                 target: 'http://localhost:9000/diapo'
+          },
+          middleware: function (connect, options) {
+            
+            //connect.static.mime.define({"image/jpeg" : ['JPG']});
+
+            return [rewriteRulesSnippet];
+          },
           base: '<%= yeoman.dist %>'
         }
       }
@@ -427,7 +472,8 @@ module.exports = function (grunt) {
             '*.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
-            'styles/fonts/{,*/}*.*'
+            'styles/fonts/{,*/}*.*',
+            'data/{,*/}*.json'
           ]
         }, {
           expand: true,
@@ -520,16 +566,20 @@ module.exports = function (grunt) {
       }
     }
   });
-  
+
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-connect-rewrite');
+
   // Clean the .git/hooks/pre-commit file then copy in the latest version
   grunt.registerTask('hookmeup', ['clean:hooks', 'shell:hooks']);
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+      return grunt.task.run(['build', 'configureRewriteRules', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([
+      'configureRewriteRules',
       'clean:server',
       'wiredep',
       'concurrent:server',
@@ -537,6 +587,11 @@ module.exports = function (grunt) {
       'connect:livereload',
       'watch'
     ]);
+    /*
+    grunt.task.run([
+        'configureRewriteRules',
+        'connect:development'
+    ]);*/
   });
 
   grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {

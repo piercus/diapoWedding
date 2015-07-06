@@ -5,7 +5,7 @@ define(['models/Base'], function(B){
 		getImages: function(){
 			return this.imageIds.map(function(tId){
 				return B.models.Img.get(tId);
-			});
+			}).compact();
 		}
 	});
 

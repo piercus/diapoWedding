@@ -28,30 +28,52 @@ module.exports = function(grunt) {
 		var list = {};
  
 		ncp(originalOptions.src, originalOptions.dest, {
-			filter : function(name,o){
-				//console.log(name,o);
-				return (
+			filter : function(name){
+				
+				var a1 = (name.split(".")[1] === undefined),
+					a2 = (
 						(typeof(name.split(".")[1]) === "string") && 
 						(name.split(".")[1].toLowerCase() === "jpg")
-					) || 
-					(name.split(".")[1] === undefined);
+					);
+					
+
+				if(a1){
+					return true;
+				} else {
+					if(a2){
+						list[name] = name.replace(originalOptions.src, originalOptions.dest);
+					}
+					return false;
+				}
+
+				
 			},
-			limit : 1,
+			limit : 1/*,
 			transform : function(read, write){
 				if(!list[read.path]){
 					list[read.path] = write.path;
-					//console.log(read.path, write.path);
+					console.log("transform",read.path, write.path);
 				} 
+				read.on('end',function(){
+					console.log("end read");
+				})
+				write.on('end',function(){
+					console.log("end write");
+				})
+			    read.on('data',function(){
+					console.log("data read");
+				})
 				read.close();
+
 				write.close();
 				return;
 
-			}
+			}*/
 		}, function (err) {
 			if (err) {
 				return console.error(err);
 			}
-
+			//console.error("bf progressBar");
 			var bar = new ProgressBar('  Resizing on going ! [:bar] :percent :etas', {
 				complete: '=',
 				incomplete: ' ',
@@ -59,10 +81,10 @@ module.exports = function(grunt) {
 				total: Object.keys(list).length
 			});
 
-			//console.log(Object.keys(list).length);
+			console.log(Object.keys(list).length);
 
 			objMapAsync(list, function(v, k, cb){
-					//console.log("reqizing ",k, " to ",v);
+					console.log("reqizing ",k, " to ",v);
 					gm(k).resize(originalOptions.width, originalOptions.height).write(v, cb);
 				}, {
 					progressBar : bar,

@@ -8,6 +8,7 @@
     "grunt-autoprefixer": "^2.0.0",
     "grunt-bower-requirejs": "^2.0.0",
     "grunt-concurrent": "^1.0.0",
+    "grunt-connect-rewrite": "^0.2.1",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-compass": "^1.0.3",
     "grunt-contrib-concat": "^0.5.0",
@@ -42,6 +43,7 @@
     "ncp": "^2.0.0",
     "progress": "^1.1.8",
     "requirejs": "^2.1.18",
+    "sqlite3": "^3.0.8",
     "time-grunt": "^1.0.0"
   },
   "engines": {

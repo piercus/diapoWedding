@@ -9,3 +9,4 @@ appConfig.js
 app/styles/_sprite.scss
 app/images/spritesheet.jpg
 *.bckup
+app/styles/_sprites.scss

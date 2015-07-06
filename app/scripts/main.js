@@ -5,6 +5,7 @@ require.config({
 		'seed-js/Seed': 'vendor/Seed-min',
 		domReady: 'vendor/domReady',
 		async: '../../bower_components/requirejs-plugins/src/async',
+		pagination: '../../bower_components/angular-utils-pagination/dirPagination',
 		font: '../../bower_components/requirejs-plugins/src/font',
 		goog: '../../bower_components/requirejs-plugins/src/goog',
 		image: '../../bower_components/requirejs-plugins/src/image',
@@ -15,7 +16,8 @@ require.config({
 		propertyParser: '../../bower_components/requirejs-plugins/src/propertyParser',
 		'angular-mocks': '../../bower_components/angular-mocks/angular-mocks',
 		depend: '../../bower_components/requirejs-plugins/src/depend',
-		'Markdown.Converter': '../../bower_components/requirejs-plugins/lib/Markdown.Converter'
+		'Markdown.Converter': '../../bower_components/requirejs-plugins/lib/Markdown.Converter',
+		'angular-utils-pagination': '../../bower_components/angular-utils-pagination/dirPagination'
 	},
 	shim: {
 		angular: {
@@ -34,11 +36,10 @@ require.config({
 
 
 
-require(['angular', 'angular-route', 'controllers/controllers', 'directives/directives'],function(ng){
+require(['angular', 'angular-route', 'controllers/controllers', 'directives/directives', 'pagination', "filters/filters"],function(ng){
 	'use strict';
-	//console.log("here");
-
-	ng.module('diapoWedding', ["ngRoute", 'controllers', 'directives']);
+	//console.log("here");angular.module('myApp', ['angularUtils.directives.dirPagination']);
+	ng.module('diapoWedding', ["ngRoute", 'controllers', 'directives', 'angularUtils.directives.dirPagination', 'filters']);
 
 
 	ng.module('diapoWedding').run(["$rootScope", "models", function(rScope, models) {
@@ -54,9 +55,9 @@ require(['angular', 'angular-route', 'controllers/controllers', 'directives/dire
 		//console.log("config");
 		
 		rProvider
-			.when('/', {controller: 'HelloCtrl', templateUrl: 'views/hello.html'})
-			.when('/tag/:id', {controller: 'ViewTagCtrl', templateUrl: 'views/viewTag.html'})
-			.when('/image/:id', {controller: 'ViewImageCtrl', templateUrl: 'views/viewImage.html'})
+			.when('/', {controller: 'HelloCtrl', templateUrl: '/views/hello.html'})
+			.when('/tag/:id', {controller: 'ViewTagCtrl', templateUrl: '/views/viewTag.html'})
+			.when('/image/:id/:parentTagId', {controller: 'ViewImageCtrl', templateUrl: '/views/viewImage.html'})
 			.otherwise({redirectTo: '/'});
 
 	}]);

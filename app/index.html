@@ -18,9 +18,10 @@
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+    <base href="/diapo/" />
     <div class="left-panel">
       <ul class="tags-menu">
-        <a ng-repeat="tag in allTags" ng-href="/#/tag/{{tag.id}}">
+        <a ng-repeat="tag in allTags" ng-href="/diapo/#/tag/{{tag.id}}">
            <li class="tag-item">{{tag.name}}</li>
         </a>
       </ul>
