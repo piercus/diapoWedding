@@ -7,9 +7,16 @@
  
 .square {
   &:hover {
-    border : 2px solid red;
+    border : 2px solid gray;
+    background-color: rgba(255,255,255,0.2);
     a {
       display: inline;
+      position: absolute;
+      font-size: 12px;
+      bottom: 0px;
+      right: 0px;
+      text-decoration: none;
+      color: #222222;
     }
   }
   border : none;
@@ -112,13 +119,18 @@ ul.pagination {
     display : block;
     text-align: center;
     &:hover {
-      text-decoration : none;
+      text-decoration : none; 
       color : #3E3E3E;
       li {
         background-color : #E4E4E4;
       }
     }
   }
+}
+
+.button{
+  cursor : pointer;
+  float: left;
 }
 
 .tags-menu {
@@ -130,12 +142,81 @@ ul.pagination {
 }
 ul.image {
   float:left;
+  padding:13px;
 }
 div.image{
   display : block;
   border : 2px solid red;
   position: relative;
+  float: left;
+  margin: 11px;
 }
 .main-img {
   width:550px;
+}
+
+.prevButton, .nextButton {
+  position : absolute;
+  width : 50px;
+  height : 51px;
+  &:hover {
+    cursor : pointer;
+  }
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}
+.prevButton {
+  background-image: url("../images/Left.png");
+  &:hover {
+    background-image: url("../images/Left_hover.png");
+  }
+
+}
+.nextButton {
+  background-image: url("../images/Right.png");
+  &:hover {
+    background-image: url("../images/Right_hover.png");
+  }
+  right: 0px;
+}
+
+.fullScreenOverlay
+{
+  .background{
+    height:100%;
+    width:100%;
+    filter: alpha(opacity=75); /* internet explorer */
+    -khtml-opacity: 0.75;      /* khtml, old safari */
+    -moz-opacity: 0.75;       /* mozilla, netscape */
+    opacity: 0.75;           /* fx, safari, opera */
+    background-color:black;
+    position : fixed;
+  }
+  .container {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  tagged-image {
+    position: relative;
+    display: block;
+    width: 1100px;
+    margin: 30px auto;
+
+    .main-img {
+      width:1100px;
+    }
+  }
+  .button {
+    color : white;
+  }
+  height:100%;
+  width:100%;
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:1 !important;
 }

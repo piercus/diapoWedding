@@ -1,9 +1,15 @@
-<h2>{{parentTag.name}} Photos</h2><a ng-href="/diapo/#/tag/{{parentTag.id}}">>>> retour aux vignettes</a>
-<dir-pagination-controls on-page-change="reload(newPageNumber)"></dir-pagination-controls><div class="play-button" ng-click="play()" style="display:none;">play</div>
-<ul class="image">
-	<div dir-paginate="image in parentTag.getImages() | itemsPerPage:1" current-page="indexImage" class="image"  ng-attr-style="width :{{config.imgWidth}}px; height : {{image.height/image.width*config.imgWidth | ceil }}px">
-		<tagged-image img="image" list="tagInfos" width="{{config.imgWidth}}"></tagged-image>
-	</div>
+<h2>{{parentTag.name}} Photos</h2><a ng-href="/diapo/#/tag/{{parentTag.id}}/{{image.id}}">>>> retour aux vignettes</a>
+<div class="prevButton" href="" ng-click="setCurrentPage(indexImage - 1)" ng-show="indexImage > 1"></div>
+<dir-pagination-controls on-page-change="onPageChange(newPageNumber)" direction-links="false"></dir-pagination-controls>
+<div class="button" ng-click="play()" ng-hide="interval">play</div>
+<div class="button" ng-click="pause()" ng-show="interval">pause</div>
+<div class="button" ng-click="showFull()">full</div>
+<div class="nextButton" href="" ng-click="setCurrentPage(indexImage + 1)" ng-show="indexImage < nPage"></div>
+<div dir-paginate="image in parentTag.getImages() | itemsPerPage:1" current-page="indexImage">
+<div class="image" ng-attr-style="width :{{config.imgWidth}}px; height : {{image.height/image.width*config.imgWidth | ceil }}px">
+	
+	<tagged-image img="image" list="tagInfos" width="{{config.imgWidth}}"></tagged-image>
+	
 	<ul class="tags bottom-tags">
 			<a ng-repeat="tagInfo in tagInfos" ng-href="/diapo/#/tag/{{tagInfo.tag.id}}">
 				<li>
@@ -11,5 +17,9 @@
 				</li>
 			</a>
 	</ul>
-</ul>
- 
+</div>
+<div class="fullScreenOverlay" ng-show="fullScreen">
+<div class="background"></div>
+<div class="container" ng-click="hideFull()"><tagged-image img="image" list="tagInfos" width="{{config.imgWidth*2}}"></tagged-image></div>
+</div>
+ </div>

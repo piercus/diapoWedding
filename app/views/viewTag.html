@@ -1,9 +1,12 @@
 <h2>{{tag.name}}</h2>
+<div class="prevButton" href="" ng-click="setCurrentPage(indexTagPage - 1)" ng-show="indexTagPage > 1"></div>
+<dir-pagination-controls direction-links="false">
+</dir-pagination-controls>
+<div class="nextButton" href="" ng-click="setCurrentPage(indexTagPage + 1)" ng-show="indexTagPage < nPage"></div>
 <ul class="thumbnails">
-	<li dir-paginate="image in tag.getImages() | itemsPerPage:9" class="thumbnail">
+	<li dir-paginate="image in tag.getImages() | itemsPerPage:itemsPerPage" current-page="indexTagPage"  class="thumbnail">
 		<a ng-href="/diapo/#/image/{{image.id}}/{{tag.id}}">
 			<div class="img {{image.spriteClass}}"></div>
 		</a>
 	</li>
 </ul>
-<dir-pagination-controls></dir-pagination-controls>

@@ -56,7 +56,7 @@ require(['angular', 'angular-route', 'controllers/controllers', 'directives/dire
 		
 		rProvider
 			.when('/', {controller: 'HelloCtrl', templateUrl: '/views/hello.html'})
-			.when('/tag/:id', {controller: 'ViewTagCtrl', templateUrl: '/views/viewTag.html'})
+			.when('/tag/:id/:parentImgId?', {controller: 'ViewTagCtrl', templateUrl: '/views/viewTag.html'})
 			.when('/image/:id/:parentTagId', {controller: 'ViewImageCtrl', templateUrl: '/views/viewImage.html'})
 			.otherwise({redirectTo: '/'});
 
